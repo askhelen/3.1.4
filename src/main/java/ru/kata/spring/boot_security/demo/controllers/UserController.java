@@ -27,13 +27,15 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping(value = "user")
+
+    @GetMapping("user")
     public String viewUser(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         model.addAttribute("user", user);
         return "user";
     }
+
 
     @GetMapping("/admin")
     public String admin(Model model) {
@@ -42,46 +44,5 @@ public class UserController {
         model.addAttribute("users", userService.listUsers());
         model.addAttribute("user", user);
         return "admin";
-
-    }
-
-    @PostMapping("/admin")
-    public String addUser(User user, String role) {
-        userService.addUser(user, role);
-        return "redirect:/admin";
-    }
-
-    @PostMapping("/edit")
-    public String editUser(@RequestParam Long id, @RequestParam String firstName,
-                           @RequestParam String lastName,
-                           @RequestParam Long age,
-                           @RequestParam String email,
-                           @RequestParam String password,
-                           @RequestParam(required = false) String roleList){
-
-        User user1 = userService.getUserById(id);
-        user1.setFirstName(firstName);
-        user1.setLastName(lastName);
-        user1.setAge(age);
-        user1.setEmail(email);
-        user1.setPassword(password);
-
-        if (roleList != null) {
-            if (roleList.equals("ROLE_ADMIN")) {
-                user1.getRoles().clear();
-                user1.getRoles().add(new Role(1L, "ROLE_ADMIN"));
-            } else {
-                user1.getRoles().clear();
-                user1.getRoles().add(new Role(2L, "ROLE_USER"));
-            }
-        }
-        userService.updateUser(user1);
-        return "redirect:/admin";
-    }
-
-    @RequestMapping ("/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        userService.removeUser(id);
-        return "redirect:/admin";
     }
 }

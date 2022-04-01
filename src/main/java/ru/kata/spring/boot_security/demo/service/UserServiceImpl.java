@@ -8,13 +8,11 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.*;
 
 @Service
 @Transactional
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -22,10 +20,11 @@ public class UserServiceImpl {
     @Autowired
     private UserRepository userRepository;
 
-    public void addUser(User user, String role) {
+
+    public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(role);
-        if ("ROLE_ADMIN".equals(role)) {
+
+        if ("ROLE_ADMIN".equals(user.getRole())) {
             user.setRoles(new HashSet<>(Set.of(new Role(1L, "ROLE_ADMIN"),
                                                 new Role(2L, "ROLE_USER"))));
         } else {

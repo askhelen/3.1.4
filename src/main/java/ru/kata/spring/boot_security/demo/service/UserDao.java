@@ -6,7 +6,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Transient;
 
 @Repository
 @Transactional
@@ -15,9 +14,8 @@ public class UserDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public User findByUsername(String firstName){
-        User user = (User) entityManager.createQuery("FROM User where firstName = '" + firstName + "'").getSingleResult();
-        return user;
+    public User findByUsername(String email){
+        return (User) entityManager.createQuery("FROM User where email = '" + email + "'").getSingleResult();
     }
 
 }

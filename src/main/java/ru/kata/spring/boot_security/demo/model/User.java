@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,7 +35,7 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", unique = true, updatable = false)
     private String password;
 
     private String role;
